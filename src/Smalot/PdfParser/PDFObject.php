@@ -889,7 +889,7 @@ class PDFObject
                         }
                         $whiteSpace = '';
 
-                        $factorX = -$current_font_size * $current_position_tm['a'] - $current_font_size * $current_position_tm['i'];
+                        $factorX = $current_font_size * $current_position_tm['a'] + $current_font_size * $current_position_tm['i'];
                         $factorY = $current_font_size * $current_position_tm['b'] + $current_font_size * $current_position_tm['j'];
 
                         if (true === $this->addPositionWhitespace && false !== $current_position['x']) {
@@ -908,9 +908,9 @@ class PDFObject
                                 // would need before considering them a "tab". In the
                                 // future, we might offer this value to users as a config
                                 // option.
-                                if ($curX >= abs($factorX * 7)) {
+                                if ($curX >= $factorX * 7) {
                                     $whiteSpace = "\t";
-                                } elseif ($curX >= abs($factorX * 2)) {
+                                } elseif ($curX >= $factorX) {
                                     $whiteSpace = ' ';
                                 }
                             }
@@ -941,10 +941,10 @@ class PDFObject
                             // with the next text block.
                             // Provide a 'fudge' factor guess on how wide this text block
                             // is based on the number of characters. This helps limit the
-                            // number of tabs inserted, but isn't perfect.
-                            $factor = $factorX / 2;
+                            // number of tabs and spaces inserted, but isn't perfect.
+                            $factor = $factorX / $current_font_size * ($current_position_cm['a'] ?? $current_position_cm['i']);
                             $current_position = [
-                                'x' => $currentX - mb_strlen($newtext) * $factor,
+                                'x' => $currentX + mb_strlen($newtext) * $factor,
                                 'y' => $currentY,
                             ];
                         } elseif (false === $last_written_position) {

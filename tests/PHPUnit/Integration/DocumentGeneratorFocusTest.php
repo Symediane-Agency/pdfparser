@@ -126,12 +126,15 @@ class DocumentGeneratorFocusTest extends TestCase
 
         $outputText = $document->getText();
 
-        self::assertStringContainsString('(einschließlich Marktpflegequote) von 4 Mrd € angestrebt.', $outputText);
+        self::assertStringContainsString(
+            '(einschließlich Marktpflegequote) von '."\t".'4 Mrd € angestrebt.',
+            $outputText
+        );
 
         // check whitespaces and tab usage
         self::assertStringContainsString(
             //           ,--- here is a tab
-            'Fälligkeit: 	19. Oktober 2028 '."\n".
+            'Fälligkeit: '."\t".'19. Oktober 2028 '."\n".
             'Zinszahlung: 19. Oktober gzj., Zinslaufbeginn 15. Juni 2023',
             $outputText
         );
@@ -157,8 +160,8 @@ class DocumentGeneratorFocusTest extends TestCase
         // located on page 2
         self::assertStringContainsString(
             'Einbeziehung in den '."\n".
-            'Börsenhandel: Dienstag, 5. September 2023 '."\n".
-            'Valutierungstag: Donnerstag, 7. September 2023',
+            'Börsenhandel: '."\t".'Dienstag, 5. September 2023 '."\n".
+            'Valutierungstag: '."\t".'Donnerstag, 7. September 2023',
             $outputText
         );
     }
@@ -176,7 +179,7 @@ class DocumentGeneratorFocusTest extends TestCase
 
         // Actual encoded spaces in the document are preserved
         self::assertStringContainsString(
-            'SmallPDF                       SMALLPDF                             SmallPDF',
+            'SmallPDF                        SMALLPDF                             SmallPDF',
             $outputText
         );
 
